@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .hidden { display: none; }
+        .read-more-btn, .read-less-btn { 
+            background: #4CAF50; color: white; border: none; 
+            padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Knowledge Base Test</h1>
+    <div id="loading">Loading...</div>
+    <div id="cards-container"></div>
+
+    <script>
+        console.log('Script started');
+        
+        // Simple test data
+        const testCards = [
+            {
+                filename: 'test1.pdf',
+                title: 'Test Document 1',
+                summary: {
+                    en: {
+                        short: 'Short summary test',
+                        detailed: 'Detailed summary test with more information about the document content.'
+                    },
+                    th: {
+                        short: 'สรุปสั้น ทดสอบ',
+                        detailed: 'สรุปแบบละเอียด ทดสอบ พร้อมข้อมูลเพิ่มเติมเกี่ยวกับเนื้อหาเอกสาร'
+                    }
+                },
+                insights: {
+                    en: ['Test insight 1', 'Test insight 2'],
+                    th: ['ข้อมูลเชิงลึก 1', 'ข้อมูลเชิงลึก 2']
+                },
+                podcastFile: null
+            },
+            {
+                filename: 'Data mining technicque for failure prediction.pdf',
+                title: 'Data Mining Technique For Failure Prediction',
+                summary: {
+                    en: {
+                        short: 'This research presents data mining techniques for predicting failures.',
+                        detailed: 'This comprehensive research explores advanced data mining methodologies for failure prediction in industrial systems.'
+                    },
+                    th: {
+                        short: 'งานวิจัยนี้นำเสนอเทคนิคการขุดข้อมูลสำหรับการทำนายความล้มเหลว',
+                        detailed: 'งานวิจัยครบถ้วนนี้สำรวจวิธีการขุดข้อมูลขั้นสูงสำหรับการทำนายความล้มเหลวในระบบอุตสาหกรรม'
+                    }
+                },
+                insights: {
+                    en: ['Machine learning can predict failures with 85-95% accuracy'],
+                    th: ['Machine learning สามารถทำนายความล้มเหลวได้แม่นยำ 85-95%']
+                },
+                podcastFile: null
+            }
+        ];
+        
+        let currentLanguage = 'en';
+        
+        function toggleSummary(cardId, showDetailed) {
+            console.log('Toggle summary:', cardId, showDetailed);
+            const shortDiv = document.getElementById(`summary-short-${cardId}`);
+            const detailedDiv = document.getElementById(`summary-detailed-${cardId}`);
+            
+            if (shortDiv && detailedDiv) {
+                if (showDetailed) {
+                    shortDiv.classList.add('hidden');
+                    detailedDiv.classList.remove('hidden');
+                } else {
+                    shortDiv.classList.remove('hidden');
+                    detailedDiv.classList.add('hidden');
+                }
+            }
+        }
+        
+        function createCard(cardData) {
+            const cardId = cardData.filename.replace(/[^a-zA-Z0-9]/g, '_');
+            const lang = currentLanguage;
+            
+            return `
+                <div class="card">
+                    <h3>${cardData.title}</h3>
+                    
+                    <div>
+                        <h4>Summary</h4>
+                        <div id="summary-short-${cardId}">
+                            ${cardData.summary[lang].short}
+                            <button class="read-more-btn" onclick="toggleSummary('${cardId}', true)">
+                                ${lang === 'en' ? 'Read More' : 'อ่านเพิ่มเติม'}
+                            </button>
+                        </div>
+                        <div id="summary-detailed-${cardId}" class="hidden">
+                            ${cardData.summary[lang].detailed}
+                            <button class="read-less-btn" onclick="toggleSummary('${cardId}', false)">
+                                ${lang === 'en' ? 'Read Less' : 'อ่านน้อยลง'}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4>Insights</h4>
+                        <ul>
+                            ${cardData.insights[lang].map(insight => `<li>${insight}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4>Podcast</h4>
+                        ${cardData.podcastFile ? 
+                            `<audio controls><source src="${cardData.podcastFile}" type="audio/wav"></audio>` :
+                            '<p style="color: red;">ยังไม่พบ file podcast เรื่องนี้</p>'
+                        }
+                    </div>
+                </div>
+            `;
+        }
+        
+        function loadCards() {
+            console.log('Loading cards...');
+            const container = document.getElementById('cards-container');
+            const loading = document.getElementById('loading');
+            
+            try {
+                let html = '';
+                testCards.forEach(card => {
+                    html += createCard(card);
+                });
+                
+                container.innerHTML = html;
+                loading.style.display = 'none';
+                console.log('Cards loaded successfully');
+            } catch (error) {
+                console.error('Error loading cards:', error);
+                container.innerHTML = '<p>Error loading cards: ' + error.message + '</p>';
+                loading.style.display = 'none';
+            }
+        }
+        
+        // Make toggleSummary globally accessible
+        window.toggleSummary = toggleSummary;
+        
+        // Load cards when page is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, starting card load...');
+            setTimeout(loadCards, 100); // Small delay to ensure everything is ready
+        });
+        
+        console.log('Script setup complete');
+    </script>
+</body>
+</html>

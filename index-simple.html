@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="home-icon">🏠</span>
+                <h1>Knowledge Base</h1>
+            </div>
+            <div class="language-toggle">
+                <button id="lang-en" class="lang-btn active">EN</button>
+                <button id="lang-th" class="lang-btn">TH</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Loading knowledge cards...</p>
+            </div>
+            <div class="cards-container" id="cards-container">
+                <!-- Knowledge cards will be dynamically generated here -->
+            </div>
+        </div>
+        
+        <!-- Refresh Button -->
+        <button class="refresh-btn" id="refresh-btn" title="Refresh to check for new files">
+            🔄
+        </button>
+        
+        <!-- New File Notification -->
+        <div class="new-file-notification hidden" id="new-file-notification">
+            <span id="notification-text">New files detected!</span>
+        </div>
+    </main>
+
+    <script src="app-simple.js"></script>
+</body>
+</html>

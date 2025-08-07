@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Knowledge Base App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .error-card {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            text-align: center;
+            color: #856404;
+        }
+        
+        .error-card h3 {
+            color: #d63031;
+            margin-bottom: 1rem;
+        }
+        
+        .error-card ul {
+            text-align: left;
+            display: inline-block;
+        }
+        
+        .error-card code {
+            background: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .no-cards {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+            font-size: 1.2rem;
+            background: white;
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .processed-time {
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: block;
+        }
+        
+        .audio-filename {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        
+        .connection-status {
+            position: fixed;
+            top: 80px;
+            right: 2rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .connection-status.online {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .connection-status.offline {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="home-icon">🏠</span>
+                <h1>Knowledge Base <span style="font-size: 0.7em; color: #28a745;">Dynamic</span></h1>
+            </div>
+            <div class="language-toggle">
+                <button id="lang-en" class="lang-btn active">EN</button>
+                <button id="lang-th" class="lang-btn">TH</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Loading knowledge cards from server...</p>
+            </div>
+            <div class="cards-container" id="cards-container">
+                <!-- Knowledge cards will be dynamically loaded from API -->
+            </div>
+        </div>
+        
+        <!-- Refresh Button -->
+        <button class="refresh-btn" id="refresh-btn" title="Refresh to check for new files">
+            🔄
+        </button>
+        
+        <!-- New File Notification -->
+        <div class="new-file-notification hidden" id="new-file-notification">
+            <span id="notification-text">New files detected!</span>
+        </div>
+        
+        <!-- Connection Status -->
+        <div class="connection-status online" id="connection-status">
+            🟢 Server Connected
+        </div>
+    </main>
+
+    <script src="app-dynamic.js"></script>
+    
+    <script>
+        // Add connection status monitoring
+        function updateConnectionStatus(isOnline) {
+            const status = document.getElementById('connection-status');
+            if (status) {
+                status.className = `connection-status ${isOnline ? 'online' : 'offline'}`;
+                status.innerHTML = isOnline ? '🟢 Server Connected' : '🔴 Server Offline';
+            }
+        }
+        
+        // Check server connection periodically
+        async function checkServerConnection() {
+            try {
+                const response = await fetch('http://localhost:8080/api/knowledge-cards');
+                updateConnectionStatus(response.ok);
+            } catch (error) {
+                updateConnectionStatus(false);
+            }
+        }
+        
+        // Check connection every 10 seconds
+        setInterval(checkServerConnection, 10000);
+        
+        // Initial check after 2 seconds
+        setTimeout(checkServerConnection, 2000);
+    </script>
+</body>
+</html>
