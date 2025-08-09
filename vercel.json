@@ -6,5 +6,11 @@
   },
   "env": {
     "GROQ_API_KEY": "@groq_api_key"
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/app.py"
+    }
+  ]
 }
