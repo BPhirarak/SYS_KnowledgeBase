@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Knowledge Base Flask App for Vercel Deployment
 Serverless version of the Knowledge Base system

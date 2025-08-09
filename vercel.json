@@ -1,16 +1,10 @@
 {
   "functions": {
-    "api/app.py": {
+    "api/index.py": {
       "maxDuration": 30
     }
   },
   "env": {
     "GROQ_API_KEY": "@groq_api_key"
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/app.py"
-    }
-  ]
+  }
 }
